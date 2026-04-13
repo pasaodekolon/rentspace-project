@@ -1,0 +1,130 @@
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  overflow-x: hidden;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Анимации для карточек */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* Анимация появления */
+.fade-in {
+    animation: fadeIn 0.6s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Global adaptive layout for App.jsx */
+@media (max-width: 1024px) {
+  .app-main-content {
+    padding: 20px 14px !important;
+    gap: 16px !important;
+  }
+
+  .app-footer-inner {
+    padding: 18px 14px 12px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-main-content {
+    flex-direction: column !important;
+    padding: 14px 10px !important;
+    gap: 12px !important;
+  }
+
+  .app-content {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .app-footer-top {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+
+  .app-footer-nav {
+    width: 100% !important;
+    gap: 10px !important;
+  }
+
+  .app-footer-bottom {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-footer-inner {
+    padding: 14px 10px 10px !important;
+  }
+
+  .app-footer-title {
+    font-size: 16px !important;
+  }
+
+  .app-footer-tagline,
+  .app-footer-link {
+    font-size: 13px !important;
+  }
+}
