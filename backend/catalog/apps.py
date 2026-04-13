@@ -8,18 +8,17 @@ class CatalogConfig(AppConfig):
     name = 'catalog'
 
     def ready(self):
-        def auto_seed_categories(sender, **kwargs):
+        def auto_seed_categories(sender=None, **kwargs):
             if sender.label != 'catalog':
                 return
 
             try:
                 from catalog.category_seed import seed_categories
                 seed_categories()
-            except Exception:
-                # Keep migrations/deploy resilient if DB is not ready yet.
-                pass
+            except Exception as exc:
+                print(f"[catalog] auto_seed_categories skipped: {exc}")
 
-        def ensure_admin_user(sender, **kwargs):
+        def ensure_admin_user(sender=None, **kwargs):
             if sender.label != 'catalog':
                 return
 
@@ -56,9 +55,13 @@ class CatalogConfig(AppConfig):
 
                 if needs_update:
                     user.save()
-            except Exception:
-                # Keep migrations/deploy resilient if auth tables are not ready yet.
-                pass
+            except Exception as exc:
+                print(f"[catalog] ensure_admin_user skipped: {exc}")
 
         post_migrate.connect(auto_seed_categories, sender=self, dispatch_uid='catalog_auto_seed_categories')
         post_migrate.connect(ensure_admin_user, sender=self, dispatch_uid='catalog_auto_create_superuser')
+
+        # Also try on app startup to handle hosted environments
+        # where migration hooks may not run as expected.
+        auto_seed_categories(sender=self)
+        ensure_admin_user(sender=self)
