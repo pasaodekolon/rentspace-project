@@ -39,8 +39,22 @@ class CatalogConfig(AppConfig):
                         'is_superuser': True,
                     },
                 )
-                if created:
-                    user.set_password(password)
+                needs_update = created
+                if not user.is_staff:
+                    user.is_staff = True
+                    needs_update = True
+                if not user.is_superuser:
+                    user.is_superuser = True
+                    needs_update = True
+                if email and user.email != email:
+                    user.email = email
+                    needs_update = True
+
+                # Keep credentials predictable on hosted environments.
+                user.set_password(password)
+                needs_update = True
+
+                if needs_update:
                     user.save()
             except Exception:
                 # Keep migrations/deploy resilient if auth tables are not ready yet.
