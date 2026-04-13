@@ -628,34 +628,34 @@ const StatisticsTab = () => {
             <div style={styles.card}>
                 <h2 style={styles.cardTitle}>Статистика</h2>
                 <div style={styles.statsGrid}>
-                    <div style={styles.statCard}>
-                        <div style={styles.statIcon}>📦</div>
-                        <div style={styles.statValue}>{statistics.items.total}</div>
-                        <div style={styles.statLabel}>Всего товаров</div>
-                        <div style={styles.statSub}>
+                    <div style={styles.statisticsCard}>
+                        <div style={styles.statisticsIcon}>📦</div>
+                        <div style={styles.statisticsValue}>{statistics.items.total}</div>
+                        <div style={styles.statisticsLabel}>Всего товаров</div>
+                        <div style={styles.statisticsSub}>
                             <span>Доступно: {statistics.items.available}</span>
                             <span>Арендовано: {statistics.items.rented}</span>
                         </div>
                     </div>
-                    <div style={styles.statCard}>
-                        <div style={styles.statIcon}>📋</div>
-                        <div style={styles.statValue}>{statistics.rentals.total}</div>
-                        <div style={styles.statLabel}>Всего аренд</div>
-                        <div style={styles.statSub}>
+                    <div style={styles.statisticsCard}>
+                        <div style={styles.statisticsIcon}>📋</div>
+                        <div style={styles.statisticsValue}>{statistics.rentals.total}</div>
+                        <div style={styles.statisticsLabel}>Всего аренд</div>
+                        <div style={styles.statisticsSub}>
                             <span>Ожидание: {statistics.rentals.pending}</span>
                             <span>Активные: {statistics.rentals.active}</span>
                             <span>Завершено: {statistics.rentals.completed}</span>
                         </div>
                     </div>
-                    <div style={styles.statCard}>
-                        <div style={styles.statIcon}>💰</div>
-                        <div style={styles.statValue}>{statistics.revenue.total.toLocaleString()} ₽</div>
-                        <div style={styles.statLabel}>Общий доход</div>
+                    <div style={styles.statisticsCard}>
+                        <div style={styles.statisticsIcon}>💰</div>
+                        <div style={styles.statisticsValue}>{statistics.revenue.total.toLocaleString()} ₽</div>
+                        <div style={styles.statisticsLabel}>Общий доход</div>
                     </div>
-                    <div style={styles.statCard}>
-                        <div style={styles.statIcon}>⭐</div>
-                        <div style={styles.statValue}>{statistics.rating}</div>
-                        <div style={styles.statLabel}>Рейтинг</div>
+                    <div style={styles.statisticsCard}>
+                        <div style={styles.statisticsIcon}>⭐</div>
+                        <div style={styles.statisticsValue}>{statistics.rating}</div>
+                        <div style={styles.statisticsLabel}>Рейтинг</div>
                     </div>
                 </div>
             </div>
@@ -1060,7 +1060,7 @@ const styles = {
         gap: '20px',
         marginTop: '20px'
     },
-    statCard: {
+    statisticsCard: {
         background: '#8c6a4f',
         padding: '30px',
         borderRadius: '15px',
@@ -1068,21 +1068,21 @@ const styles = {
         color: 'white',
         boxShadow: '0 10px 24px rgba(120, 94, 70, 0.2)'
     },
-    statIcon: {
+    statisticsIcon: {
         fontSize: '48px',
         marginBottom: '15px'
     },
-    statValue: {
+    statisticsValue: {
         fontSize: '36px',
         fontWeight: '700',
         marginBottom: '10px'
     },
-    statLabel: {
+    statisticsLabel: {
         fontSize: '16px',
         opacity: 0.9,
         marginBottom: '10px'
     },
-    statSub: {
+    statisticsSub: {
         fontSize: '14px',
         opacity: 0.8,
         display: 'flex',
