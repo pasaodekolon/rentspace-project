@@ -5,6 +5,7 @@ import axios from 'axios';
 import RentalForm from './RentalForm';
 import Reviews from './Reviews';
 import Messenger from './Messenger';
+import { getApiUrl, getMediaUrl } from '../config/api';
 
 const ItemDetail = () => {
     const { id } = useParams();
@@ -36,7 +37,7 @@ const ItemDetail = () => {
 
     const checkFavorite = async () => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/favorites/check/?item_id=${id}`, {
+            const response = await axios.get(getApiUrl(`/api/favorites/check/?item_id=${id}`), {
                 withCredentials: true
             });
             setIsFavorite(response.data.is_favorite);
@@ -48,7 +49,7 @@ const ItemDetail = () => {
     const fetchAvailability = async () => {
         setAvailabilityLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8000/api/items/${id}/availability/`, {
+            const response = await axios.get(getApiUrl(`/api/items/${id}/availability/`), {
                 withCredentials: true
             });
             setAvailability(response.data);
@@ -62,7 +63,7 @@ const ItemDetail = () => {
     const fetchRecommendations = async () => {
         setRecommendationsLoading(true);
         try {
-            const response = await axios.get(`http://localhost:8000/api/items/${id}/recommendations/`, {
+            const response = await axios.get(getApiUrl(`/api/items/${id}/recommendations/`), {
                 withCredentials: true
             });
             setRecommendations({
@@ -84,12 +85,12 @@ const ItemDetail = () => {
 
         try {
             if (isFavorite) {
-                await axios.delete(`http://localhost:8000/api/favorites/${id}/`, {
+                await axios.delete(getApiUrl(`/api/favorites/${id}/`), {
                     withCredentials: true
                 });
                 setIsFavorite(false);
             } else {
-                await axios.post('http://localhost:8000/api/favorites/', { item: id }, {
+                await axios.post(getApiUrl('/api/favorites/'), { item: id }, {
                     withCredentials: true
                 });
                 setIsFavorite(true);
@@ -104,7 +105,7 @@ const ItemDetail = () => {
         setLoading(true);
         setError('');
         try {
-            const response = await axios.get(`http://localhost:8000/api/items/${id}/`, {
+            const response = await axios.get(getApiUrl(`/api/items/${id}/`), {
                 withCredentials: true
             });
             setItem(response.data);
@@ -118,12 +119,7 @@ const ItemDetail = () => {
 
 
     const getImageUrl = (image) => {
-        if (image) {
-            if (image.startsWith('http://') || image.startsWith('https://')) {
-                return image;
-            }
-            return `http://localhost:8000${image}`;
-        }
+        if (image) return getMediaUrl(image);
         return 'https://via.placeholder.com/600x400/c7a17a/ffffff?text=Rently';
     };
 

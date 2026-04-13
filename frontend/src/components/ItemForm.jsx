@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const ItemForm = ({ onSuccess, onCancel }) => {
     const { user } = useAuth();
@@ -25,7 +26,7 @@ const ItemForm = ({ onSuccess, onCancel }) => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/categories/');
+            const response = await axios.get(getApiUrl('/api/categories/'));
             setCategories(response.data);
         } catch (error) {
             console.error('Ошибка загрузки категорий:', error);
@@ -77,7 +78,7 @@ const ItemForm = ({ onSuccess, onCancel }) => {
 
             // Отправляем данные с учетными данными сессии
             const response = await axios.post(
-                'http://localhost:8000/api/items/',
+                getApiUrl('/api/items/'),
                 formDataToSend,
                 {
                     headers: {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../config/api';
 
 const CategoriesMenu = ({ onClose, onCategorySelect }) => {
     const [hoveredCategory, setHoveredCategory] = useState(null);
@@ -13,7 +14,7 @@ const CategoriesMenu = ({ onClose, onCategorySelect }) => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/categories/?parent_only=true', {
+            const response = await axios.get(getApiUrl('/api/categories/?parent_only=true'), {
                 withCredentials: true
             });
             setCategories(response.data);

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { RF_REGIONS } from '../constants/regions';
+import { getApiUrl } from '../config/api';
 
 const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'login' }) => {
     const [isLogin, setIsLogin] = useState(initialMode === 'login');
@@ -49,8 +50,8 @@ const AuthModal = ({ isOpen, onClose, onAuthSuccess, initialMode = 'login' }) =>
 
         try {
             const url = isLogin 
-                ? 'http://localhost:8000/api/auth/login/'
-                : 'http://localhost:8000/api/auth/register/';
+                ? getApiUrl('/api/auth/login/')
+                : getApiUrl('/api/auth/register/');
 
             const response = await axios.post(url, formData, {
                 withCredentials: true  // Отправляем cookies для сессии

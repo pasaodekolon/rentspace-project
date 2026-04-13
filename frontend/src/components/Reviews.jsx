@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const Reviews = ({ itemId, userId }) => {
     const { user } = useAuth();
@@ -19,8 +20,8 @@ const Reviews = ({ itemId, userId }) => {
     const fetchReviews = async () => {
         try {
             const url = itemId 
-                ? `http://localhost:8000/api/reviews/?item_id=${itemId}`
-                : `http://localhost:8000/api/reviews/?user_id=${userId}`;
+                ? getApiUrl(`/api/reviews/?item_id=${itemId}`)
+                : getApiUrl(`/api/reviews/?user_id=${userId}`);
             const response = await axios.get(url, {
                 withCredentials: true
             });
@@ -56,7 +57,7 @@ const Reviews = ({ itemId, userId }) => {
                 reviewData.item = itemId;
             }
 
-            await axios.post('http://localhost:8000/api/reviews/', reviewData, {
+            await axios.post(getApiUrl('/api/reviews/'), reviewData, {
                 withCredentials: true
             });
 

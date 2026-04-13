@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
+import { getApiUrl } from '../config/api';
 
 const AuthContext = createContext();
 
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
     const checkAuth = async () => {
         try {
             // Проверяем авторизацию через сессию
-            const response = await axios.get('http://localhost:8000/api/auth/user/', {
+            const response = await axios.get(getApiUrl('/api/auth/user/'), {
                 withCredentials: true  // Отправляем cookies для сессии
             });
             if (response.data.success && response.data.user) {
@@ -41,7 +42,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             // Выходим через API для очистки сессии на сервере
-            await axios.post('http://localhost:8000/api/auth/logout/', {}, {
+            await axios.post(getApiUrl('/api/auth/logout/'), {}, {
                 withCredentials: true
             });
         } catch (error) {

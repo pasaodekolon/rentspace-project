@@ -4,6 +4,7 @@ import EditProfile from './EditProfile';
 import RentalManagement from './RentalManagement';
 import Favorites from './Favorites';
 import axios from 'axios';
+import { getApiUrl, getMediaUrl } from '../config/api';
 
 const Profile = () => {
     const { user, loading, login } = useAuth();
@@ -36,14 +37,14 @@ const Profile = () => {
     const fetchUserData = async () => {
         setDataLoading(true);
         try {
-            const rentalsResponse = await axios.get('http://localhost:8000/api/auth/my-rentals/', {
+            const rentalsResponse = await axios.get(getApiUrl('/api/auth/my-rentals/'), {
                 withCredentials: true
             });
             if (rentalsResponse.data.success) {
                 setUserRentals(rentalsResponse.data.rentals);
             }
             
-            const itemsResponse = await axios.get('http://localhost:8000/api/auth/my-items/', {
+            const itemsResponse = await axios.get(getApiUrl('/api/auth/my-items/'), {
                 withCredentials: true
             });
             if (itemsResponse.data.success) {
@@ -62,7 +63,7 @@ const Profile = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/categories/');
+            const response = await axios.get(getApiUrl('/api/categories/'));
             setCategories(response.data || []);
         } catch (error) {
             console.error('Ошибка загрузки категорий:', error);
@@ -101,7 +102,7 @@ const Profile = () => {
         setItemActionError('');
         try {
             await axios.patch(
-                `http://localhost:8000/api/items/${editingItem.id}/`,
+                getApiUrl(`/api/items/${editingItem.id}/`),
                 {
                     title: editingItem.title,
                     description: editingItem.description,
@@ -129,7 +130,7 @@ const Profile = () => {
         if (!secondConfirmation) return;
 
         try {
-            await axios.delete(`http://localhost:8000/api/items/${itemId}/`, {
+            await axios.delete(getApiUrl(`/api/items/${itemId}/`), {
                 withCredentials: true
             });
             fetchUserData();
@@ -201,8 +202,7 @@ const Profile = () => {
 
     const getAvatarUrl = (avatar) => {
         if (!avatar) return null;
-        if (avatar.startsWith('http://') || avatar.startsWith('https://')) return avatar;
-        return `http://localhost:8000${avatar}`;
+        return getMediaUrl(avatar);
     };
 
     return (
@@ -512,7 +512,7 @@ const Profile = () => {
                                                     {item.image && (
                                                         <div style={styles.itemImageContainer}>
                                                             <img 
-                                                                src={item.image.startsWith('http') ? item.image : `http://localhost:8000${item.image}`}
+                                                                src={getMediaUrl(item.image)}
                                                                 alt={item.title}
                                                                 style={styles.itemImage}
                                                             />
@@ -602,7 +602,7 @@ const StatisticsTab = () => {
 
     const fetchStatistics = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/auth/statistics/', {
+            const response = await axios.get(getApiUrl('/api/auth/statistics/'), {
                 withCredentials: true
             });
             if (response.data.success) {

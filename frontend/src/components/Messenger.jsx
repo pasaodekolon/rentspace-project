@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const Messenger = ({ onClose, recipientId = null, recipientUsername = null }) => {
     const { user } = useAuth();
@@ -43,7 +44,7 @@ const Messenger = ({ onClose, recipientId = null, recipientUsername = null }) =>
 
     const fetchConversations = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/messages/conversations/', {
+            const response = await axios.get(getApiUrl('/api/messages/conversations/'), {
                 withCredentials: true
             });
             setConversations(response.data);
@@ -64,7 +65,7 @@ const Messenger = ({ onClose, recipientId = null, recipientUsername = null }) =>
 
     const fetchMessages = async (userId) => {
         try {
-            const response = await axios.get(`http://localhost:8000/api/messages/with_user/?user_id=${userId}`, {
+            const response = await axios.get(getApiUrl(`/api/messages/with_user/?user_id=${userId}`), {
                 withCredentials: true
             });
             setMessages(response.data);
@@ -114,7 +115,7 @@ const Messenger = ({ onClose, recipientId = null, recipientUsername = null }) =>
                 }
             }
 
-            await axios.post('http://localhost:8000/api/messages/', formData, {
+            await axios.post(getApiUrl('/api/messages/'), formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -8,6 +8,7 @@ import Notifications from './Notifications';
 import CategoriesMenu from './CategoriesMenu';
 import HowItWorks from './HowItWorks';
 import axios from 'axios';
+import { getApiUrl, getMediaUrl } from '../config/api';
 
 const Header = ({ onItemAdded }) => {
     const { user, login, logout } = useAuth();
@@ -59,13 +60,12 @@ const Header = ({ onItemAdded }) => {
 
     const getAvatarUrl = (avatar) => {
         if (!avatar) return null;
-        if (avatar.startsWith('http://') || avatar.startsWith('https://')) return avatar;
-        return `http://localhost:8000${avatar}`;
+        return getMediaUrl(avatar);
     };
 
     const fetchUnreadCount = useCallback(async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/notifications/unread_count/', {
+            const response = await axios.get(getApiUrl('/api/notifications/unread_count/'), {
                 withCredentials: true
             });
             setUnreadNotificationsCount(response.data.count);

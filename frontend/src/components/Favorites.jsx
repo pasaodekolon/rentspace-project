@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl, getMediaUrl } from '../config/api';
 
 const Favorites = () => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Favorites = () => {
 
     const fetchFavorites = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/favorites/', {
+            const response = await axios.get(getApiUrl('/api/favorites/'), {
                 withCredentials: true
             });
             setFavorites(response.data);
@@ -30,7 +31,7 @@ const Favorites = () => {
 
     const removeFavorite = async (itemId) => {
         try {
-            await axios.delete(`http://localhost:8000/api/favorites/${itemId}/`, {
+            await axios.delete(getApiUrl(`/api/favorites/${itemId}/`), {
                 withCredentials: true
             });
             setFavorites(favorites.filter(item => item.id !== itemId));
@@ -41,12 +42,7 @@ const Favorites = () => {
     };
 
     const getImageUrl = (image) => {
-        if (image) {
-            if (image.startsWith('http://') || image.startsWith('https://')) {
-                return image;
-            }
-            return `http://localhost:8000${image}`;
-        }
+        if (image) return getMediaUrl(image);
         return 'https://via.placeholder.com/300x200/c7a17a/ffffff?text=Rently';
     };
 

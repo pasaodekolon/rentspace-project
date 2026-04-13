@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const RentalManagement = ({ onUpdate }) => {
     const { user } = useAuth();
@@ -14,7 +15,7 @@ const RentalManagement = ({ onUpdate }) => {
 
     const fetchRentals = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/rentals/?as_owner=true', {
+            const response = await axios.get(getApiUrl('/api/rentals/?as_owner=true'), {
                 withCredentials: true
             });
             let filteredRentals = response.data;
@@ -33,7 +34,7 @@ const RentalManagement = ({ onUpdate }) => {
 
     const handleConfirm = async (rentalId) => {
         try {
-            await axios.post(`http://localhost:8000/api/rentals/${rentalId}/confirm/`, {}, {
+            await axios.post(getApiUrl(`/api/rentals/${rentalId}/confirm/`), {}, {
                 withCredentials: true
             });
             fetchRentals();
@@ -48,7 +49,7 @@ const RentalManagement = ({ onUpdate }) => {
             return;
         }
         try {
-            await axios.post(`http://localhost:8000/api/rentals/${rentalId}/reject/`, {}, {
+            await axios.post(getApiUrl(`/api/rentals/${rentalId}/reject/`), {}, {
                 withCredentials: true
             });
             fetchRentals();
@@ -63,7 +64,7 @@ const RentalManagement = ({ onUpdate }) => {
             return;
         }
         try {
-            await axios.post(`http://localhost:8000/api/rentals/${rentalId}/complete/`, {}, {
+            await axios.post(getApiUrl(`/api/rentals/${rentalId}/complete/`), {}, {
                 withCredentials: true
             });
             fetchRentals();

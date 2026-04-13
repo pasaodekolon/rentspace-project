@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const Notifications = ({ onClose }) => {
     const { user } = useAuth();
@@ -21,7 +22,7 @@ const Notifications = ({ onClose }) => {
 
     const fetchNotifications = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/notifications/', {
+            const response = await axios.get(getApiUrl('/api/notifications/'), {
                 withCredentials: true
             });
             setNotifications(response.data);
@@ -34,7 +35,7 @@ const Notifications = ({ onClose }) => {
 
     const fetchUnreadCount = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/notifications/unread_count/', {
+            const response = await axios.get(getApiUrl('/api/notifications/unread_count/'), {
                 withCredentials: true
             });
             setUnreadCount(response.data.count);
@@ -45,7 +46,7 @@ const Notifications = ({ onClose }) => {
 
     const markAsRead = async (notificationId) => {
         try {
-            await axios.post(`http://localhost:8000/api/notifications/${notificationId}/mark_read/`, {}, {
+            await axios.post(getApiUrl(`/api/notifications/${notificationId}/mark_read/`), {}, {
                 withCredentials: true
             });
             fetchNotifications();
@@ -57,7 +58,7 @@ const Notifications = ({ onClose }) => {
 
     const markAllAsRead = async () => {
         try {
-            await axios.post('http://localhost:8000/api/notifications/mark_all_read/', {}, {
+            await axios.post(getApiUrl('/api/notifications/mark_all_read/'), {}, {
                 withCredentials: true
             });
             fetchNotifications();

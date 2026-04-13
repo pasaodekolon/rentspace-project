@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { getApiUrl } from '../config/api';
 
 const RentalForm = ({ item, onClose, onSuccess }) => {
     const { user } = useAuth();
@@ -139,7 +140,7 @@ const RentalForm = ({ item, onClose, onSuccess }) => {
                 total_price: calculateTotalPrice()
             };
 
-            await axios.post('http://localhost:8000/api/rentals/', rentalData, {
+            await axios.post(getApiUrl('/api/rentals/'), rentalData, {
                 withCredentials: true  // Отправляем cookies для аутентификации
             });
             

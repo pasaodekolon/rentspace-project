@@ -3,9 +3,11 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-simple-key-for-development-12345'
-DEBUG = True
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-simple-key-for-development-12345')
+DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() == 'true'
+
+allowed_hosts = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [host.strip() for host in allowed_hosts if host.strip()]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -80,24 +82,23 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': None
 }
 
-# Настройки CORS (разрешаем запросы с фронтенда)
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # React будет работать на этом порту
-]
-
-CORS_ALLOW_ALL_ORIGINS = True  # На время разработки можно так
+# Настройки CORS
+cors_allowed_origins = os.getenv(
+    'CORS_ALLOWED_ORIGINS',
+    'http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173'
+).split(',')
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in cors_allowed_origins if origin.strip()]
+CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'False').lower() == 'true'
 CORS_ALLOW_CREDENTIALS = True  # Разрешаем отправку cookies для сессий
 
 # Настройки CSRF для работы с CORS
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:5173',  # Vite dev server по умолчанию
-    'http://127.0.0.1:5173',
-]
+csrf_trusted_origins = os.getenv(
+    'CSRF_TRUSTED_ORIGINS',
+    'http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173'
+).split(',')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins if origin.strip()]
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = False  # Для доступа через JavaScript (если нужно)
-
 
 # Настройки медиа и статических файлов
 MEDIA_URL = '/media/'
@@ -105,3 +106,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

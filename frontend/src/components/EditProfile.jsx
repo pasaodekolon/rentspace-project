@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { RF_REGIONS } from '../constants/regions';
+import { getApiUrl } from '../config/api';
 
 const EditProfile = ({ user, onClose, onUpdate }) => {
     const [formData, setFormData] = useState({
@@ -41,7 +42,7 @@ const EditProfile = ({ user, onClose, onUpdate }) => {
                 formDataToSend.append('avatar', avatarFile);
             }
 
-            const response = await axios.put('http://localhost:8000/api/auth/user/', formDataToSend, {
+            const response = await axios.put(getApiUrl('/api/auth/user/'), formDataToSend, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data'

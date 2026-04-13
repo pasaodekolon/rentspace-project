@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import RentalForm from './RentalForm';
+import { getApiUrl, getMediaUrl } from '../config/api';
 
 const ItemList = ({ filters = {}, refreshTrigger, searchQuery = '' }) => {
     const navigate = useNavigate();
@@ -17,7 +18,7 @@ const ItemList = ({ filters = {}, refreshTrigger, searchQuery = '' }) => {
 
     const fetchItems = () => {
         setLoading(true);
-        axios.get('http://localhost:8000/api/items/', {
+        axios.get(getApiUrl('/api/items/'), {
             withCredentials: true
         })
             .then(response => {
@@ -41,7 +42,7 @@ const ItemList = ({ filters = {}, refreshTrigger, searchQuery = '' }) => {
 
     const fetchFavorites = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/favorites/', {
+            const response = await axios.get(getApiUrl('/api/favorites/'), {
                 withCredentials: true
             });
             const favoriteIds = new Set(response.data.map(item => item.id));
@@ -61,7 +62,7 @@ const ItemList = ({ filters = {}, refreshTrigger, searchQuery = '' }) => {
         const isFavorite = favorites.has(itemId);
         try {
             if (isFavorite) {
-                await axios.delete(`http://localhost:8000/api/favorites/${itemId}/`, {
+                await axios.delete(getApiUrl(`/api/favorites/${itemId}/`), {
                     withCredentials: true
                 });
                 setFavorites(prev => {
@@ -70,7 +71,7 @@ const ItemList = ({ filters = {}, refreshTrigger, searchQuery = '' }) => {
                     return newSet;
                 });
             } else {
-                await axios.post('http://localhost:8000/api/favorites/', { item: itemId }, {
+                await axios.post(getApiUrl('/api/favorites/'), { item: itemId }, {
                     withCredentials: true
                 });
                 setFavorites(prev => new Set([...prev, itemId]));
@@ -131,11 +132,7 @@ const ItemList = ({ filters = {}, refreshTrigger, searchQuery = '' }) => {
         }
         if (item.image) {
             // Если URL уже полный (начинается с http:// или https://), используем его напрямую
-            if (item.image.startsWith('http://') || item.image.startsWith('https://')) {
-                return item.image;
-            }
-            // Иначе формируем полный URL из относительного пути
-            return `http://localhost:8000${item.image}`;
+            return getMediaUrl(item.image);
         }
         // Заглушка если изображения нет
         return 'https://via.placeholder.com/300x200/c7a17a/ffffff?text=Rently';
