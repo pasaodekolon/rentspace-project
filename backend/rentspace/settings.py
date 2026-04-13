@@ -97,8 +97,9 @@ csrf_trusted_origins = os.getenv(
     'http://localhost:3000,http://127.0.0.1:3000,http://localhost:5173,http://127.0.0.1:5173'
 ).split(',')
 CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_trusted_origins if origin.strip()]
-CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = os.getenv('CSRF_COOKIE_SAMESITE', 'None' if not DEBUG else 'Lax')
 CSRF_COOKIE_HTTPONLY = False  # Для доступа через JavaScript (если нужно)
+SESSION_COOKIE_SAMESITE = os.getenv('SESSION_COOKIE_SAMESITE', 'None' if not DEBUG else 'Lax')
 
 # Настройки медиа и статических файлов
 MEDIA_URL = '/media/'
@@ -111,3 +112,4 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = os.getenv('SECURE_SSL_REDIRECT', 'False').lower() == 'true'
